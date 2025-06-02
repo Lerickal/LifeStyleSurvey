@@ -1,0 +1,148 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #ffffff;
+    color: #000000;
+    padding: 42px;
+    display: flex;
+    justify-content: center;
+}
+
+.container{
+    width: 100%;
+    max-width: 1000%;
+    border: 3px solid #000000;
+    padding: 42px;
+}
+
+header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+header h2{
+    font-weight: normal;
+}
+
+header nav a{
+    margin-left: 30px;
+    text-decoration: none;
+    color: #59a9ec;
+    font-size: 15px;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+fieldset{
+    border: none;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+legend{
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+label{
+    display: flex;
+    flex-direction: column;
+    font-size: 15px;
+}
+
+input[type="text"], input[type="email"], input[type="date"], input[type="tel"]{
+    padding: 9px;
+    border: 3px solid #cccccc;
+    border-radius: 6px;
+    margin-top: 3px;
+    width: 252px;
+}
+
+input[type="checkbox"]{
+    margin-right: 9px;
+}
+
+input[type="radio"]{
+    align-items: center;
+}
+
+fieldset:nth-of-type(2) label{
+    flex-direction: row;
+    align-items: center;
+}
+
+table{
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+}
+
+thead th{
+    text-align: center;
+    padding: 9px;
+    font-weight: normal;
+    border-bottom: 3px solid #cccccc;
+}
+
+tbody td{
+    text-align: center;
+    padding: 9px;
+    border-bottom: 3px solid #cccccc;
+}
+
+tbody td:first-child{
+    text-align: left;
+}
+
+.submit-container{
+    display: flex;
+    justify-content: center;
+}
+
+button[type="submit"]{
+    background-color: #59a9ec;
+    color: #ffffff;
+    border: none;
+    padding: 9px 30px;
+    font-size: 15px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background-color 0.3s;
+
+    &:hover{
+        background-color: #3788d8;
+    }
+}
+
+#resultSummary, #noResults{
+    margin-top: 21px;
+    font-size: 15px;
+}
+
+#resultSummary h4{
+    margin-top: 21px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#resultSummary ul{
+    list-style-type: none;
+    padding-left: 0;
+    margin-top: 12px;
+}
+
+#resultSummary li{
+    margin-bottom: 6px;
+}

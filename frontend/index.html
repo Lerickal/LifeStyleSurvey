@@ -1,0 +1,99 @@
+<!DOCTYPE html>>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Survey Form</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h2>_Surveys</h2>
+            <nav>
+                <a href="index.html">FILL OUT SURVEY</a>
+                <a href="results.html">VIEW SURVEY RESULTS</a>
+            </nav>
+        </header>
+
+        <form id="surveyForm">
+            <fieldset>
+                <legend>Personal Details:</legend>
+                <label>Full Names<input type="text" name="fullName" required/></label>
+                <label>Email<input type="email" name="email" required/></label>
+                <label>Date of Birth<input type="date" name="dateOfBirth" required/></label>
+                <label>Contact Number<input type="tel" name="contactNo" required/></label>
+            </fieldset>
+
+            <fieldset>
+                <legend>What is your favourite food?</legend>
+                <label><input type="checkbox" name="food" value="Pizza"/>Pizza</label>
+                <label><input type="checkbox" name="food" value="Pasta"/>Pasta</label>
+                <label><input type="checkbox" name="food" value="Pap and Wors"/>Pap and Wors</label>
+                <label><input type="checkbox" name="food" value="Other"/>other</label>
+            </fieldset>
+
+            <fieldset>
+                <legend>Please rate your level of agreement on a scale from 1 to 5, with 1 being
+                    "strongly agree" and 5 being "strongly disagree".
+                </legend>
+                <table>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Strongly Agree</th>
+                            <th>Agree</th>
+                            <th>Neutral</th>
+                            <th>Disagree</th>
+                            <th>Strongly Disagree</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>I like to watch movies.</td>
+                            <td><input type="radio" name="rdMovies" value="1" required></td>
+                            <td><input type="radio" name="rdMovies" value="2" required></td>
+                            <td><input type="radio" name="rdMovies" value="3" required></td>
+                            <td><input type="radio" name="rdMovies" value="4" required></td>
+                            <td><input type="radio" name="rdMovies" value="5" required></td>
+                        </tr>
+                        <tr>
+                            <td>I like to listen to the radio.</td>
+                            <td><input type="radio" name="rdFM" value="1" required></td>
+                            <td><input type="radio" name="rdFM" value="2" required></td>
+                            <td><input type="radio" name="rdFM" value="3" required></td>
+                            <td><input type="radio" name="rdFM" value="4" required></td>
+                            <td><input type="radio" name="rdFM" value="5" required></td>
+                        </tr>
+                        <tr>
+                            <td>I like to like to eatout.</td>
+                            <td><input type="radio" name="rdEatout" value="1" required></td>
+                            <td><input type="radio" name="rdEatout" value="2" required></td>
+                            <td><input type="radio" name="rdEatout" value="3" required></td>
+                            <td><input type="radio" name="rdEatout" value="4" required></td>
+                            <td><input type="radio" name="rdEatout" value="5" required></td>
+                        </tr>
+                        <tr>
+                            <td>I like to watch television.</td>
+                            <td><input type="radio" name="rdTV" value="1" required></td>
+                            <td><input type="radio" name="rdTV" value="2" required></td>
+                            <td><input type="radio" name="rdTV" value="3" required></td>
+                            <td><input type="radio" name="rdTV" value="4" required></td>
+                            <td><input type="radio" name="rdTV" value="5" required></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </fieldset>
+
+            <div class="submit-container">
+                <button type="submit">SUBMIT</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>
