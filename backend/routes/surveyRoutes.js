@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');
 
-router.post('/servey', async(req, res)=>{
+router.post('/survey', async(req, res)=>{
     const {
         fullName, email, dataOfBirth, age, contactNo, food, ratingLikes
     } = req.body;
@@ -13,7 +13,7 @@ router.post('/servey', async(req, res)=>{
 
         const [respondentResult] = await connection.query(
             'insert into SurveyRespondent(fullName, email, dateOfBirth, contactNo) values(?, ?, ?, ?)',
-            [fullName, email, dataOfBirth, contactNo]
+            [fullName, email, dateOfBirth, contactNo]
         );
 
         const respondentID = respondentResult.insertId;
@@ -25,14 +25,14 @@ router.post('/servey', async(req, res)=>{
             );
         }
 
-        const ratings = [
-            {hobies: 'Movies', likeMeter: ratingLikes.rdMovies},
-            {hobies: 'Radio', likeMeter: ratingLikes.rdFM},
-            {hobies: 'Eatout', likeMeter: ratingLikes.rdEatout},
-            {hobies: 'TV', likeMeter: ratingLikes.rdTV},
+        const ratingData = [
+            {hobies: 'Movies', likeMeter: ratings.Movies},
+            {hobies: 'Radio', likeMeter: ratings.FM},
+            {hobies: 'Eatout', likeMeter: ratings.Eatout},
+            {hobies: 'TV', likeMeter: ratings.TV},
         ];
 
-        for (const{hobies, likeMeter} of ratings){
+        for (const{hobies, likeMeter} of ratingData){
             await connection.query(
                 'insert into RatingLikes(respondentID, hobies, likeMeter) values(?, ?, ?)',
                 [respondentID, hobies, likeMeter]
@@ -52,7 +52,7 @@ router.post('/servey', async(req, res)=>{
 
 router.get('/survey', async(req, res)=>{
     try{
-        const [respondents] = await db.query('selct * from SurveyRespondent');
+        const [respondents] = await db.query('select * from SurveyRespondent');
         const [foodChoices] = await db.query('select * from FoodChoice');
         const [ratings] = await db.query('select * from RatingLikes');
 
@@ -61,24 +61,28 @@ router.get('/survey', async(req, res)=>{
             .map(f => f.foodItem);
 
             const ratingLikes = {};
-            ratings.filter(r => r.respondentID === respondent.respondentID).array.forEach(r => {
+            ratings.filter(r => r.respondentID === respondent.respondentID).forEach(r => {
                 switch(r.hobies){
-                    case 'Movies': ratingLikes.rdMovies = r.likeMeter; break;
-                    case 'Radio': ratingLikes.rdFM = r.likeMeter; break;
-                    case 'Eatoput': ratingLikes.rdEatout = r.likeMeter; break;
-                    case 'TV': ratingLikes.rdTV = r.likeMeter; break;
+                    case 'Movies': ratings.Movies = r.likeMeter; break;
+                    case 'Radio': ratings.FM = r.likeMeter; break;
+                    case 'Eatput': ratings.Eatout = r.likeMeter; break;
+                    case 'TV': ratings.TV = r.likeMeter; break;
                 }
             });
 
             const today = new Date();
-            const dob = new Date(respondent.dataOfBirth);
-            const age = today.getFullYear() - dob.getFullYear();
+            const dob = new Date(respondent.dateOfBirth);
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const moonth = today.getMonth() - birthDate.getMonth();
+            if (moonth < 0 || (moonth === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
 
             return{
                 id:respondent.respondentID,
                 fullName: respondent.fullName,
                 email: respondent.email,
-                dataOfBirth: respondent.dataOfBirth,
+                dataOfBirth: respondent.dateOfBirth,
                 age: age,
                 contactNo: respondent.contactNo,
                 food: food,
