@@ -1,8 +1,5 @@
-const { count } = require("console");
-
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("surveyForm");
-    const isResultPage = window.location.pathname.includes("results.html");
 
     if (form) {
         form.addEventListener("submit", async (e) => {
@@ -14,22 +11,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 foodChoices.push(input.value);
             });
 
-            const ratings = {
-                Movies: formData.get("rdMovies"),
-                Radio: formData.get("rdFM"),
-                Eatout: formData.get("rdEatout"),
-                TV: formData.get("rdTV")
-            };
-
-            const respondent = {
-                fullName: formData.get("fullName"),
-                email: formData.get("email"),
-                dateOfBirth: formData.get("dateOfBirth"),
-                contactNo: formData.get("contactNo"),
-                food: foodChoices,
-                ratings: ratings
-            };
-
             const requiredFields = ["fullName", "email", "dateOfBirth", "contactNo"];
             for (const field of requiredFields) {
                 if (!formData.get(field)) {
@@ -38,13 +19,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
 
-            const dateOfBirth = new Date(formData.get("dateOfBirth"));
-            const today = new Date();
-            const age = today.getFullYear() - dateOfBirth.getFullYear();
-            if (age < 5 || age > 120) {
-                alert("Age must be between 5 and 120.");
-                return;
-            }
+            const ratings = {
+                Movies: formData.get("rdMovies"),
+                Radio: formData.get("rdFM"),
+                Eatout: formData.get("rdEatout"),
+                TV: formData.get("rdTV")
+            };
 
             const ratingFields = ["rdMovies", "rdFM", "rdEatout", "rdTV"];
             for (const field of ratingFields) {
@@ -54,19 +34,30 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
 
-            const survey = {
+            const dateOfBirth = new Date(formData.get("dateOfBirth"));
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const moonth = today.getMonth() - birthDate.getMonth();
+            if (moonth < 0 || (moonth === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            if (age < 5 || age > 120) {
+                alert("Age must be between 5 and 120.");
+                return;
+            }
+
+            const respondent = {
                 fullName: formData.get("fullName"),
                 email: formData.get("email"),
                 dateOfBirth: formData.get("dateOfBirth"),
-                age: age,
                 contactNo: formData.get("contactNo"),
-                food: foodChoice,
-                ratingLikes: {
-                    rdMovies: Number(formData.get("rdMovies")),
-                    rdFM: Number(formData.get("rdFM")),
-                    rdEatout: Number(formData.get("rdEatout")),
-                    rdTV: Number(formData.get("rdTV")),
-                },
+                food: foodChoices,
+                ratings: {
+                    Movies: Number(formData.get("rdMovies")),
+                    Radio: Number(formData.get("rdFM")),
+                    Eatout: Number(formData.get("rdEatout")),
+                    TV: Number(formData.get("rdTV")),
+                }
             };
 
             try {
@@ -90,8 +81,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const resultSection = document.getElementById("resultSection");
     if (resultSection) {
-        fetch("http://localhost:3000/api/surveys").then((res) => res.json()).then((data) =>{
-            if(!Array.isArray(data) || data.length === 0){
+        fetch("http://localhost:3000/api/surveys").then((res) => res.json()).then((data) => {
+            if (!Array.isArray(data) || data.length === 0) {
                 document.getElementById("noResults").style.display = "block";
                 document.getElementById("resultSummary").style.display = "none";
                 return;
@@ -100,25 +91,25 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("noResults").style.display = "none";
             document.getElementById("resultSummary").style.display = "block";
 
-            const totalSurveys = surveys.length;
-            const ages = surveys.map((s) => s.age);
+            const totalSurveys = data.length;
+            const ages = data.map((s) => s.age);
             const avgAge = (ages.reduce((a, b) => a + b, 0) / totalSurveys).toFixed(1);
             const youngest = Math.min(...ages);
             const oldest = Math.max(...ages);
 
-            document.getElementById("totalCount").textContent = totalSurveys;
-            document.getElementById("usualAge").textContent = avgAge;
-            document.getElementById("minAge").textContent = youngest;
-            document.getElementById("maxAge").textContent = oldest;
+            document.getElementById("totalSurveys").textContent = totalSurveys;
+            document.getElementById("averageAge").textContent = avgAge;
+            document.getElementById("oldestAge").textContent = youngest;
+            document.getElementById("youngestAge").textContent = oldest;
 
-            const foodStats = {Pizza: 0, Pasta: 0, "Pap and Wors": 0, Other: 0};
-            const ratingSums = {Movies: 0, Radio: 0, Eatout: 0, TV: 0};
-            const ratingCount = {Movies: 0, Radio: 0, Eatout: 0, TV: 0};
+            const foodStats = { Pizza: 0, Pasta: 0, "Pap and Wors": 0, Other: 0 };
+            const ratingSums = { Movies: 0, Radio: 0, Eatout: 0, TV: 0 };
+            const ratingCount = { Movies: 0, Radio: 0, Eatout: 0, TV: 0 };
 
-            data.forEach((answer)=>{
-                if(answer.food && Array.isArray(answer.food)){
-                    answer.food.forEach((f)=>{
-                        if(foodStats[f] !== undefined){
+            data.forEach((answer) => {
+                if (answer.food && Array.isArray(answer.food)) {
+                    answer.food.forEach((f) => {
+                        if (foodStats[f] !== undefined) {
                             foodStats[f]++
                         } else {
                             foodStats["Other"]++;
@@ -126,8 +117,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     });
                 }
 
-                for(let cat in answer.ratings){
-                    if(ratingSums[cat] !== undefined){
+                for (let cat in answer.ratings) {
+                    if (ratingSums[cat] !== undefined) {
                         ratingSums[cat] += parseInt(answer.ratings[cat]);
                         ratingCount[cat]++;
                     }
@@ -145,28 +136,13 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("radioRating").textContent = sumAvg(ratingSums["Radio"], ratingCount["Radio"]);
             document.getElementById("eatoutRating").textContent = sumAvg(ratingSums["Eatout"], ratingCount["Eatout"]);
             document.getElementById("tvRating").textContent = sumAvg(ratingSums["TV"], ratingCount["TV"]);
-            
-        }).catch((err)=>{
+
+        }).catch((err) => {
             console.error("Error loading results:", err);
         });
     }
 });
 
-function calculateAge(dob){
-    const birthDate = new Date(dob);
-    const today = new Date();
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const moonth = today.getMonth() - birthDate.getMonth();
-    if(moonth < 0 || (moonth === 0 && today.getDate() < birthDate.getDate())){
-        age--;
-    }
-    return age;
-}
-
-function average(arr){
-    return arr.reduce((a, b)=> a+b, 0)/ arr.length;
-}
-
-function sumAvg(sum, count){
-    return count ? (sum/count).toFixed(1): "N/A";
+function sumAvg(sum, count) {
+    return count ? (sum / count).toFixed(1) : "N/A";
 }
