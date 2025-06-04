@@ -4,7 +4,7 @@ const db = require('../db');
 
 router.post('/survey', async(req, res)=>{
     const {
-        fullName, email, dataOfBirth, age, contactNo, food, ratingLikes
+        fullName, email, dateOfBirth, age, contactNo, food, ratingLikes
     } = req.body;
 
     const connection = await db.getConnection();
@@ -25,14 +25,14 @@ router.post('/survey', async(req, res)=>{
             );
         }
 
-        const ratingData = [
-            {hobies: 'Movies', likeMeter: ratings.Movies},
-            {hobies: 'Radio', likeMeter: ratings.FM},
-            {hobies: 'Eatout', likeMeter: ratings.Eatout},
-            {hobies: 'TV', likeMeter: ratings.TV},
+        const ratings = [
+            {hobies: 'Movies', likeMeter: ratingLikes.Movies},
+            {hobies: 'Radio', likeMeter: ratingLikes.Radio},
+            {hobies: 'Eatout', likeMeter: ratingLikes.Eatout},
+            {hobies: 'TV', likeMeter: ratingLikes.TV},
         ];
 
-        for (const{hobies, likeMeter} of ratingData){
+        for (const{hobies, likeMeter} of ratings){
             await connection.query(
                 'insert into RatingLikes(respondentID, hobies, likeMeter) values(?, ?, ?)',
                 [respondentID, hobies, likeMeter]
@@ -40,7 +40,7 @@ router.post('/survey', async(req, res)=>{
         }
 
         await connection.commit();
-        res.status(201).json({mesage: 'Survey Submitted!'});
+        res.status(201).json({message: 'Survey Submitted!'});
     }catch(err){
         await connection.rollback();
         console.error('Survey submission failed: ', err);
@@ -63,18 +63,18 @@ router.get('/survey', async(req, res)=>{
             const ratingLikes = {};
             ratings.filter(r => r.respondentID === respondent.respondentID).forEach(r => {
                 switch(r.hobies){
-                    case 'Movies': ratings.Movies = r.likeMeter; break;
-                    case 'Radio': ratings.FM = r.likeMeter; break;
-                    case 'Eatput': ratings.Eatout = r.likeMeter; break;
-                    case 'TV': ratings.TV = r.likeMeter; break;
+                    case 'Movies': ratingLikes.Movies = r.likeMeter; break;
+                    case 'Radio': ratingLikes.Radio = r.likeMeter; break;
+                    case 'Eatout': ratingLikes.Eatout = r.likeMeter; break;
+                    case 'TV': ratingLikes.TV = r.likeMeter; break;
                 }
             });
 
             const today = new Date();
             const dob = new Date(respondent.dateOfBirth);
-            let age = today.getFullYear() - birthDate.getFullYear();
-            const moonth = today.getMonth() - birthDate.getMonth();
-            if (moonth < 0 || (moonth === 0 && today.getDate() < birthDate.getDate())) {
+            let age = today.getFullYear() - dob.getFullYear();
+            const moonth = today.getMonth() - dob.getMonth();
+            if (moonth < 0 || (moonth === 0 && today.getDate() < dob.getDate())) {
                 age--;
             }
 
@@ -82,7 +82,7 @@ router.get('/survey', async(req, res)=>{
                 id:respondent.respondentID,
                 fullName: respondent.fullName,
                 email: respondent.email,
-                dataOfBirth: respondent.dateOfBirth,
+                dateOfBirth: respondent.dateOfBirth,
                 age: age,
                 contactNo: respondent.contactNo,
                 food: food,

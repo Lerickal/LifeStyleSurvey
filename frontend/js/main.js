@@ -36,9 +36,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const dateOfBirth = new Date(formData.get("dateOfBirth"));
             const today = new Date();
-            let age = today.getFullYear() - birthDate.getFullYear();
-            const moonth = today.getMonth() - birthDate.getMonth();
-            if (moonth < 0 || (moonth === 0 && today.getDate() < birthDate.getDate())) {
+            let age = today.getFullYear() - dateOfBirth.getFullYear();
+            const moonth = today.getMonth() - dateOfBirth.getMonth();
+            if (moonth < 0 || (moonth === 0 && today.getDate() < dateOfBirth.getDate())) {
                 age--;
             }
             if (age < 5 || age > 120) {
@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 dateOfBirth: formData.get("dateOfBirth"),
                 contactNo: formData.get("contactNo"),
                 food: foodChoices,
-                ratings: {
+                ratingLikes: {
                     Movies: Number(formData.get("rdMovies")),
                     Radio: Number(formData.get("rdFM")),
                     Eatout: Number(formData.get("rdEatout")),
@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
             };
 
             try {
-                const answer = await fetch("http://localhost:3000/api/survey", {
+                const answer = await fetch("http://localhost:3000/api/survey/survey", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(respondent)
@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const resultSection = document.getElementById("resultSection");
     if (resultSection) {
-        fetch("http://localhost:3000/api/surveys").then((res) => res.json()).then((data) => {
+        fetch("http://localhost:3000/api/survey/survey").then((res) => res.json()).then((data) => {
             if (!Array.isArray(data) || data.length === 0) {
                 document.getElementById("noResults").style.display = "block";
                 document.getElementById("resultSummary").style.display = "none";
