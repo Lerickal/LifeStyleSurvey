@@ -4,7 +4,7 @@ const db = require('../db');
 
 router.post('/survey', async(req, res)=>{
     const {
-        fullName, email, dateOfBirth, age, contactNo, food, ratingLikes
+        fullName, email, dateOfBirth, contactNo, food, ratingLikes
     } = req.body;
 
     const connection = await db.getConnection();
@@ -86,7 +86,7 @@ router.get('/survey', async(req, res)=>{
                 age: age,
                 contactNo: respondent.contactNo,
                 food: food,
-                ratingLikes: ratingLikes
+                ratings: ratingLikes
             };
         });
 

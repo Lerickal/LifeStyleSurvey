@@ -8,16 +8,15 @@ body{
     font-family: Arial, Helvetica, sans-serif;
     background-color: #ffffff;
     color: #000000;
-    padding: 42px;
-    display: flex;
-    justify-content: center;
+    padding: 21px;
 }
 
 .container{
     width: 100%;
-    max-width: 1000%;
+    max-width: 1200px;
     border: 3px solid #000000;
     padding: 42px;
+    margin: 0 auto;
 }
 
 header{
@@ -126,9 +125,31 @@ button[type="submit"]{
     }
 }
 
-#resultSummary, #noResults{
+#resultSection main{
+    margin-top: 30px;
+}
+
+#resultSection h3{
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+#noResults {
     margin-top: 21px;
     font-size: 15px;
+    text-align: center;
+}
+
+#resultSummary {
+    margin-top: 21px;
+    font-size: 15px;
+}
+
+#resultSummary p{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
 }
 
 #resultSummary h4{
@@ -137,12 +158,12 @@ button[type="submit"]{
     font-weight: bold;
 }
 
-#resultSummary ul{
-    list-style-type: none;
-    padding-left: 0;
-    margin-top: 12px;
+#resultSummary strong{
+    min-width: 252px;
+    display: inline-block;
+    margin-left: 9px;
 }
 
-#resultSummary li{
-    margin-bottom: 6px;
+#resultSummary span{
+    margin-left: 9px;
 }

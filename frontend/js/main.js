@@ -69,6 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 if (answer.ok) {
                     alert("Survey submitted!");
+                    form.reset();
                 } else {
                     alert("Failed to submit survey");
                 }
@@ -94,13 +95,13 @@ document.addEventListener("DOMContentLoaded", () => {
             const totalSurveys = data.length;
             const ages = data.map((s) => s.age);
             const avgAge = (ages.reduce((a, b) => a + b, 0) / totalSurveys).toFixed(1);
-            const youngest = Math.min(...ages);
             const oldest = Math.max(...ages);
+            const youngest = Math.min(...ages);
 
             document.getElementById("totalSurveys").textContent = totalSurveys;
             document.getElementById("averageAge").textContent = avgAge;
-            document.getElementById("oldestAge").textContent = youngest;
-            document.getElementById("youngestAge").textContent = oldest;
+            document.getElementById("oldestAge").textContent = oldest;
+            document.getElementById("youngestAge").textContent = youngest;
 
             const foodStats = { Pizza: 0, Pasta: 0, "Pap and Wors": 0, Other: 0 };
             const ratingSums = { Movies: 0, Radio: 0, Eatout: 0, TV: 0 };
